@@ -38,7 +38,7 @@ class CalculatorApp(ft.Container):
         self.reset()
 
         self.result = ft.Text(value="0", color=ft.colors.WHITE, size=20)
-        self.width = 350
+        self.width = 450
         self.bgcolor = ft.colors.BLACK
         self.border_radius = ft.border_radius.all(20)
         self.padding = 20
@@ -59,6 +59,7 @@ class CalculatorApp(ft.Container):
                 ),
                 ft.Row(
                     controls=[
+                        DigitButton(text="x²", button_clicked=self.button_clicked),
                         DigitButton(text="7", button_clicked=self.button_clicked),
                         DigitButton(text="8", button_clicked=self.button_clicked),
                         DigitButton(text="9", button_clicked=self.button_clicked),
@@ -117,6 +118,12 @@ class CalculatorApp(ft.Container):
             else:
                 self.operand1 = float(self.result.value)
             self.new_operand = True
+
+        elif data in ("x²"):
+            self.result.value = self.format_number(
+                float(self.result.value) * float(self.result.value)
+            )
+            self.reset()
 
         elif data in ("="):
             self.result.value = self.calculate(
