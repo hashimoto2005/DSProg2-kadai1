@@ -1,4 +1,5 @@
 import flet as ft
+import math
 
 
 class CalcButton(ft.ElevatedButton):
@@ -30,6 +31,11 @@ class ExtraActionButton(CalcButton):
         self.bgcolor = ft.colors.BLUE_GREY_100
         self.color = ft.colors.BLACK
 
+class SpecialButton(CalcButton):  # 新しいボタン専用クラス
+    def __init__(self, text, button_clicked):
+        CalcButton.__init__(self, text, button_clicked)
+        self.bgcolor = ft.colors.GREEN
+        self.color = ft.colors.WHITE
 
 class CalculatorApp(ft.Container):
     # application's root control (i.e. "view") containing all other controls
@@ -47,6 +53,7 @@ class CalculatorApp(ft.Container):
                 ft.Row(controls=[self.result], alignment="end"),
                 ft.Row(
                     controls=[
+                        SpecialButton(text="x²", button_clicked=self.button_clicked),
                         ExtraActionButton(
                             text="AC", button_clicked=self.button_clicked
                         ),
@@ -59,7 +66,9 @@ class CalculatorApp(ft.Container):
                 ),
                 ft.Row(
                     controls=[
-                        DigitButton(text="x²", button_clicked=self.button_clicked),
+                        SpecialButton(
+                            text="√", button_clicked=self.button_clicked
+                        ),
                         DigitButton(text="7", button_clicked=self.button_clicked),
                         DigitButton(text="8", button_clicked=self.button_clicked),
                         DigitButton(text="9", button_clicked=self.button_clicked),
@@ -124,6 +133,16 @@ class CalculatorApp(ft.Container):
                 float(self.result.value) * float(self.result.value)
             )
             self.reset()
+
+        elif data == "√":
+            try:
+                value = float(self.result.value)
+                if value < 0:
+                    raise ValueError("Square root of a negative number is invalid")
+                self.result.value = self.format_number(math.sqrt(value))
+                self.new_operand = True
+            except ValueError:
+                self.result.value = "Error"
 
         elif data in ("="):
             self.result.value = self.calculate(
