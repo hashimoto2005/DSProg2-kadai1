@@ -1,4 +1,5 @@
 import flet as ft
+import math
 
 
 class CalcButton(ft.ElevatedButton):
@@ -54,6 +55,9 @@ class CalculatorApp(ft.Container):
                             text="+/-", button_clicked=self.button_clicked
                         ),
                         ExtraActionButton(text="%", button_clicked=self.button_clicked),
+                        ExtraActionButton(
+                            text="√", button_clicked=self.button_clicked
+                        ),
                         ActionButton(text="÷", button_clicked=self.button_clicked),
                     ]
                 ),
@@ -124,6 +128,16 @@ class CalculatorApp(ft.Container):
                 float(self.result.value) * float(self.result.value)
             )
             self.reset()
+
+        elif data == "√":
+            try:
+                value = float(self.result.value)
+                if value < 0:
+                    raise ValueError("Square root of a negative number is invalid")
+                self.result.value = self.format_number(math.sqrt(value))
+                self.new_operand = True
+            except ValueError:
+                self.result.value = "Error"
 
         elif data in ("="):
             self.result.value = self.calculate(
