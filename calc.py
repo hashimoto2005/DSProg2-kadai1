@@ -77,6 +77,9 @@ class CalculatorApp(ft.Container):
                 ),
                 ft.Row(
                     controls=[
+                        SpecialButton(
+                            text="sin", button_clicked=self.button_clicked
+                        ),
                         DigitButton(text="4", button_clicked=self.button_clicked),
                         DigitButton(text="5", button_clicked=self.button_clicked),
                         DigitButton(text="6", button_clicked=self.button_clicked),
@@ -85,6 +88,9 @@ class CalculatorApp(ft.Container):
                 ),
                 ft.Row(
                     controls=[
+                        SpecialButton(
+                            text="cos", button_clicked=self.button_clicked
+                        ),
                         DigitButton(text="1", button_clicked=self.button_clicked),
                         DigitButton(text="2", button_clicked=self.button_clicked),
                         DigitButton(text="3", button_clicked=self.button_clicked),
@@ -93,6 +99,9 @@ class CalculatorApp(ft.Container):
                 ),
                 ft.Row(
                     controls=[
+                        SpecialButton(
+                            text="tan", button_clicked=self.button_clicked
+                        ),
                         DigitButton(
                             text="0", expand=2, button_clicked=self.button_clicked
                         ),
@@ -144,6 +153,19 @@ class CalculatorApp(ft.Container):
             except ValueError:
                 self.result.value = "Error"
 
+        elif data in ("sin", "cos", "tan"):
+            try:
+                value = float(self.result.value)
+                if data == "sin":
+                    self.result.value = self.format_number(math.sin(value))
+                elif data == "cos":
+                    self.result.value = self.format_number(math.cos(value))
+                elif data == "tan":
+                    self.result.value = self.format_number(math.tan(value))
+                self.new_operand = True
+            except ValueError:
+                self.result.value = "Error"
+                
         elif data in ("="):
             self.result.value = self.calculate(
                 self.operand1, float(self.result.value), self.operator
